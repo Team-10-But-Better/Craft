@@ -43,6 +43,12 @@
 #define CRAFT_KEY_COMMAND '/'
 #define CRAFT_KEY_SIGN '`'
 
+// Task 3 Issue 7: https://github/com/Team-10-But-Better/Craft/issues7
+// Added keys to increment/decrement/set default DPI
+#define CRAFT_KEY_INCREMENT_DPI '='
+#define CRAFT_KEY_DECREMENT_DPI '-'
+#define CRAFT_KEY_SET_DEFAULT_DPI GLFW_KEY_RIGHT_SHIFT
+
 // advanced parameters
 #define CREATE_CHUNK_RADIUS 10
 #define RENDER_CHUNK_RADIUS 10
