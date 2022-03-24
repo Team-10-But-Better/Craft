@@ -2408,15 +2408,28 @@ void handle_mouse_input() {
     }
 }
 
-void handle_movement(double dt) {
+void handle_movement(double dt, char  *teleportHeldLastFrame) {
     static float dy = 0;
     State *s = &g->players->state;
     int sz = 0;
     int sx = 0;
+    char shouldTeleport = 0;
+    int groundedMovementSpeed = 5;
+
     if (!g->typing) {
         float m = dt * 1.0;
         g->ortho = glfwGetKey(g->window, CRAFT_KEY_ORTHO) ? 64 : 0;
         g->fov = glfwGetKey(g->window, CRAFT_KEY_ZOOM) ? 15 : 65;
+        if (glfwGetKey(g->window, CRAFT_KEY_TELEPORT)){ 
+            if(!*teleportHeldLastFrame){
+                groundedMovementSpeed = 600;
+                shouldTeleport = 1;
+            }
+            *teleportHeldLastFrame = 1;
+            }
+        else {
+            *teleportHeldLastFrame = 0;
+        }
         if (glfwGetKey(g->window, CRAFT_KEY_FORWARD)) sz--;
         if (glfwGetKey(g->window, CRAFT_KEY_BACKWARD)) sz++;
         if (glfwGetKey(g->window, CRAFT_KEY_LEFT)) sx--;
@@ -2438,12 +2451,13 @@ void handle_movement(double dt) {
             }
         }
     }
-    float speed = g->flying ? 20 : 5;
+    float speed = g->flying ? 20 : groundedMovementSpeed;
     int estimate = roundf(sqrtf(
         powf(vx * speed, 2) +
         powf(vy * speed + ABS(dy) * 2, 2) +
         powf(vz * speed, 2)) * dt * 8);
     int step = MAX(8, estimate);
+
     float ut = dt / step;
     vx = vx * ut * speed;
     vy = vy * ut * speed;
@@ -2764,6 +2778,8 @@ int main(int argc, char **argv) {
         me->buffer = 0;
         g->player_count = 1;
 
+        char teleportButtonPressedLastFrame = 0;
+
         // LOAD STATE FROM DATABASE //
         int loaded = db_load_state(&s->x, &s->y, &s->z, &s->rx, &s->ry);
         force_chunks(me);
@@ -2797,7 +2813,7 @@ int main(int argc, char **argv) {
             handle_mouse_input();
 
             // HANDLE MOVEMENT //
-            handle_movement(dt);
+            handle_movement(dt, &teleportButtonPressedLastFrame);
 
             // HANDLE DATA FROM SERVER //
             char *buffer = client_recv();
