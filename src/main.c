@@ -2430,9 +2430,11 @@ void handle_movement(double dt) {
     get_motion_vector(g->flying, sz, sx, s->rx, s->ry, &vx, &vy, &vz);
     if (!g->typing) {
         if (glfwGetKey(g->window, CRAFT_KEY_JUMP)) {
-            if (g->flying) {
+            	/**play jump sound */
+		system("mpg321 ./audio/sound_effect_jump.mp3 &");
+		if (g->flying) {
                 vy = 1;
-            }
+	    }
             else if (dy == 0) {
                 dy = 8;
             }
