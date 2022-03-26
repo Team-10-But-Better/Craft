@@ -20,6 +20,9 @@
 #include "util.h"
 #include "world.h"
 
+#include <fcntl.h>
+#include <unistd.h>
+
 #define MAX_CHUNKS 8192
 #define MAX_PLAYERS 128
 #define WORKERS 4
@@ -2580,6 +2583,50 @@ void on_middle_click()
     }
 }
 
+int isDefinedCraftKey(char* str, int start, int end)
+{
+    char str2[end - start];
+    for (int i = 0; i < (end - start); i++)
+    {
+        str2[i] = str[start + i];
+    }
+    int tru = 1;
+    if (str2[0] != 'C')
+        tru = 0;
+    if (str2[1] != 'R')
+        tru = 0;
+    if (str2[2] != 'A')
+        tru = 0;
+    if (str2[3] != 'F')
+        tru = 0;
+    if (str2[4] != 'T')
+        tru = 0;
+    return tru;
+}
+
+void parseConfigToPrintKeybinds()
+{
+    int filedes = open("/home/user/Craft/src/config.h", O_RDONLY);
+    char buffer[2048];
+    read(filedes, buffer, 2048);
+    char* token;
+    const char s[2] = "\n";
+    token = strtok(buffer, s);
+    while (token != NULL)
+    {
+        if (strlen(token) >= 14)
+        {
+            if (isDefinedCraftKey(token, 8, 13) == 1)
+            {
+                printf("%s\n", token);
+            }
+        }
+        token = strtok(NULL, s);
+    }
+    //printf("%s\n", buffer);
+    close(filedes);
+}
+
 void on_key(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
     int control = mods & (GLFW_MOD_CONTROL | GLFW_MOD_SUPER);
@@ -2678,6 +2725,13 @@ void on_key(GLFWwindow *window, int key, int scancode, int action, int mods)
     }
     if (!g->typing)
     {
+        // Issue 41: https://github.com/Team-10-But-Better/Craft/issues/41
+        // The following if statement completes issue 41 by providing a mechanism to view all keybinds
+        if (key == CRAFT_KEY_VIEW_KEYBINDS)
+        {
+            parseConfigToPrintKeybinds();
+        }
+
         /* Task 3 Issue 7: https://github.com/Team-10-But-Better/Craft/issues/7
          * The following three if statements complete task 3 issue 7 by
          * incrementing, decrementing, or setting the DPI multiplier to a default value.

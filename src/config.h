@@ -49,6 +49,9 @@
 #define CRAFT_KEY_DECREMENT_DPI '-'
 #define CRAFT_KEY_SET_DEFAULT_DPI GLFW_KEY_RIGHT_SHIFT
 
+// Issue 41: https://github.com/Team-10-But-Better/Craft/issues/41
+#define CRAFT_KEY_VIEW_KEYBINDS '\\'
+
 // advanced parameters
 #define CREATE_CHUNK_RADIUS 10
 #define RENDER_CHUNK_RADIUS 10
