@@ -2248,7 +2248,13 @@ void on_key(GLFWwindow *window, int key, int scancode, int action, int mods) {
     }
     if (!g->typing) {
         if (key == CRAFT_KEY_FLY) {
-            g->flying = !g->flying;
+            	#ifdef __linux__
+		{
+		system("mpg321 ./audio/sound_effect_fly.mp3 &");
+		} 
+		#endif
+
+		g->flying = !g->flying;
         }
         if (key >= '1' && key <= '9') {
             g->item_index = key - '1';
