@@ -2341,9 +2341,15 @@ void on_mouse_button(GLFWwindow *window, int button, int action, int mods) {
         if (exclusive) {
             if (control) {
                 on_right_click();
-            }
+	    }
             else {
                 on_left_click();
+	    /**Play Hit Sound If Using Linux OS*/
+	    #ifdef __linux__
+	    {   
+	    	system("mpg321 ./audio/sound_effect_hit.mp3 &");
+	    }
+	    #endif
             }
         }
         else {
