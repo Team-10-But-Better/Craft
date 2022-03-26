@@ -2248,7 +2248,8 @@ void on_key(GLFWwindow *window, int key, int scancode, int action, int mods) {
     }
     if (!g->typing) {
         if (key == CRAFT_KEY_FLY) {
-            	#ifdef __linux__
+            	/**Play Flying Sound If Using Linux OS*/
+		#ifdef __linux__
 		{
 		system("mpg321 ./audio/sound_effect_fly.mp3 &");
 		} 
