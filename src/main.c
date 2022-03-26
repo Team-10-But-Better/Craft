@@ -2604,6 +2604,8 @@ int isDefinedCraftKey(char* str, int start, int end)
     return tru;
 }
 
+// Issue 41: https://github.com/Team-10-But-Better/Craft
+// This function was added to complete issue 41. This function prints the CRAFT KEYS to the console.
 void parseConfigToPrintKeybinds()
 {
     int filedes = open("/home/user/Craft/src/config.h", O_RDONLY);
