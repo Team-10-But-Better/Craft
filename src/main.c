@@ -2430,8 +2430,12 @@ void handle_movement(double dt) {
     get_motion_vector(g->flying, sz, sx, s->rx, s->ry, &vx, &vy, &vz);
     if (!g->typing) {
         if (glfwGetKey(g->window, CRAFT_KEY_JUMP)) {
-            	/**play jump sound */
-		system("mpg321 ./audio/sound_effect_jump.mp3 &");
+            	/**Play Jump Sound If Using Linux OS*/
+		#ifdef __linux__
+		{
+			system("mpg321 ./audio/sound_effect_jump.mp3 &");
+		}
+		#endif
 		if (g->flying) {
                 vy = 1;
 	    }
@@ -2701,9 +2705,12 @@ int main(int argc, char **argv) {
     sky_attrib.timer = glGetUniformLocation(program, "timer");
 
 
-    /** Load Background Music */
-    int background_music = system("mpg321 ./audio/background_music.mp3 &");
-
+    /** Load Background Music If Using Linux OS*/
+    #ifdef __linux__
+    {
+	int background_music = system("mpg321 ./audio/background_music.mp3 &");
+    }
+    #endif
 
     // CHECK COMMAND LINE ARGUMENTS //
     if (argc == 2 || argc == 3) {
