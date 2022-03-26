@@ -2700,6 +2700,11 @@ int main(int argc, char **argv) {
     sky_attrib.sampler = glGetUniformLocation(program, "sampler");
     sky_attrib.timer = glGetUniformLocation(program, "timer");
 
+
+    /** Load Background Music */
+    int background_music = system("mpg321 ./audio/background_music.mp3 &");
+
+
     // CHECK COMMAND LINE ARGUMENTS //
     if (argc == 2 || argc == 3) {
         g->mode = MODE_ONLINE;
@@ -2957,6 +2962,8 @@ int main(int argc, char **argv) {
         del_buffer(sky_buffer);
         delete_all_chunks();
         delete_all_players();
+	/** End background music */
+	system("pkill mpg321");
     }
 
     glfwTerminate();
