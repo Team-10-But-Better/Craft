@@ -2625,7 +2625,6 @@ void parseConfigToPrintKeybinds()
         }
         token = strtok(NULL, s);
     }
-    //printf("%s\n", buffer);
     close(filedes);
 }
 
