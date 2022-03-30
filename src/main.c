@@ -2248,13 +2248,7 @@ void on_key(GLFWwindow *window, int key, int scancode, int action, int mods) {
     }
     if (!g->typing) {
         if (key == CRAFT_KEY_FLY) {
-            	/**Play Flying Sound If Using Linux OS*/
-		#ifdef __linux__
-		{
-		system("mpg321 ./audio/sound_effect_fly.mp3 &");
-		} 
-		#endif
-
+		play_audio_source("fly");
 		g->flying = !g->flying;
         }
         if (key >= '1' && key <= '9') {
@@ -2344,13 +2338,8 @@ void on_mouse_button(GLFWwindow *window, int button, int action, int mods) {
 	    }
             else {
                 on_left_click();
-	    /**Play Hit Sound If Using Linux OS*/
-	    #ifdef __linux__
-	    {   
-	    	system("mpg321 ./audio/sound_effect_hit.mp3 &");
+            	play_audio_source("hit");
 	    }
-	    #endif
-            }
         }
         else {
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -2443,12 +2432,7 @@ void handle_movement(double dt) {
     get_motion_vector(g->flying, sz, sx, s->rx, s->ry, &vx, &vy, &vz);
     if (!g->typing) {
         if (glfwGetKey(g->window, CRAFT_KEY_JUMP)) {
-            	/**Play Jump Sound If Using Linux OS*/
-		#ifdef __linux__
-		{
-			system("mpg321 ./audio/sound_effect_jump.mp3 &");
-		}
-		#endif
+		play_audio_source("jump");	
 		if (g->flying) {
                 vy = 1;
 	    }
@@ -2602,6 +2586,27 @@ void reset_model() {
     g->time_changed = 1;
 }
 
+/**This function plays audio using MPG321 according to the argument passed in.*/
+int play_audio_source(char *type_of_music)
+{
+		if(type_of_music == "bgm")
+		{
+		system("mpg321 ../audio/background_music.mp3 > /dev/null 2>&1 &");
+		}
+		else if(type_of_music == "fly")
+		{
+		system("mpg321 ../audio/sound_effect_fly.mp3 > /dev/null 2>&1 &");
+		}
+		else if(type_of_music == "hit")
+		{
+		system("mpg321 ../audio/sound_effect_hit.mp3 > /dev/null 2>&1 &");
+		}
+		else if(type_of_music == "jump")
+		{
+		system("mpg321 ../audio/sound_effect_jump.mp3 > /dev/null 2>&1 &");
+		}
+}
+
 int craft_main(int argc, char **argv) {
     // INITIALIZATION //
     curl_global_init(CURL_GLOBAL_DEFAULT);
@@ -2717,13 +2722,7 @@ int craft_main(int argc, char **argv) {
     sky_attrib.sampler = glGetUniformLocation(program, "sampler");
     sky_attrib.timer = glGetUniformLocation(program, "timer");
 
-
-    /** Load Background Music If Using Linux OS*/
-    #ifdef __linux__
-    {
-	int background_music = system("mpg321 ./audio/background_music.mp3 &");
-    }
-    #endif
+    play_audio_source("bgm");
 
     // CHECK COMMAND LINE ARGUMENTS //
     if (argc == 2 || argc == 3) {
