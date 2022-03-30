@@ -26,10 +26,11 @@ extern "C" int craft_main(int argc, char* argv[]);
 
 
 ///[issue]https://github.com/Team-10-But-Better/Craft/issues/5
-extern "C" int valueOfMovementSpeed;
-extern "C" bool valueOfAllowNextRunKeyPress;
-extern "C" bool valueOfIsRunning; 
-TEST(tests, Issue5){
+TEST(tests, Issue5)
+{
+	extern "C" int valueOfMovementSpeed;
+	extern "C" bool valueOfAllowNextRunKeyPress;
+	extern "C" bool valueOfIsRunning; 
 	EXPECT_EQ(valueOfMovementSpeed,5);
 	EXPECT_EQ(valueOfAllowNextRunKeyPress,true);
 	EXPECT_EQ(valueOfIsRunning,false);
