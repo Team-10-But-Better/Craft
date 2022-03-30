@@ -32,9 +32,10 @@ extern "C" int craft_main(int argc, char* argv[]);
 ///[issue]https://github.com/Team-10-But-Better/Craft/issues/5
 TEST(tests, Issue5)
 {
-	EXPECT_EQ(valueOfMovementSpeed,5);
-	EXPECT_EQ(valueOfAllowNextRunKeyPress,true);
-	EXPECT_EQ(valueOfIsRunning,false);
+	EXPECT_EQ(valueOfMovementSpeed,5) << "The movement speed has been changed. This is not a fatal error, but may cause confusion for the player.";
+	
+	EXPECT_EQ(valueOfAllowNextRunKeyPress,true) << "Running behavior has been modified. This will cause players running ability to not perform as expected.";
+	EXPECT_EQ(valueOfIsRunning,false) << "Running behavior has been modified. This will cause players running ability to not perform as expected.";
 }
 
 //----------------------------------------------------
