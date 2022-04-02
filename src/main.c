@@ -2591,7 +2591,7 @@ int play_audio_source(char *type_of_music)
 {
 		if(type_of_music == "bgm")
 		{
-		system("mpg321 ../audio/background_music.mp3 > /dev/null 2>&1 &");
+		system("mpg321 ../audio/background_music.mp3 --loop 0 > /dev/null 2>&1 &");
 		}
 		else if(type_of_music == "fly")
 		{
@@ -2982,7 +2982,7 @@ int craft_main(int argc, char **argv) {
         delete_all_chunks();
         delete_all_players();
 	/** End background music */
-	system("pkill mpg321");
+	system("sleep 1 && pkill mpg321 &");
     }
 
     glfwTerminate();
