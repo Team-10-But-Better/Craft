@@ -2608,6 +2608,11 @@ void reset_model() {
     g->time_changed = 1;
 }
 
+/**This will be used to allowed/not allowed auto camera key press to enable.*/
+bool allow_auto_camera_keyPress = true;
+/**This will be used to track auto camera is enabled or not.*/
+bool camera_auto_enabled = false;
+
 int craft_main(int argc, char **argv) {
     // INITIALIZATION //
     curl_global_init(CURL_GLOBAL_DEFAULT);
@@ -2788,8 +2793,8 @@ int craft_main(int argc, char **argv) {
         me->name[0] = '\0';
         me->buffer = 0;
         g->player_count = 1;
-        bool allow_auto_camera_keyPress = true;
-        bool camera_auto_enabled = false;
+        //bool allow_auto_camera_keyPress = true;
+        //bool camera_auto_enabled = false;
 
         // LOAD STATE FROM DATABASE //
         int loaded = db_load_state(&s->x, &s->y, &s->z, &s->rx, &s->ry);
