@@ -9,8 +9,13 @@
 
 extern "C" bool helloWorld;
 extern "C" bool func_1();
-//----------------------------------------------------
-TEST(Assert, empty) { GTEST_ASSERT_EQ(true, true); }
+extern "C" bool allow_auto_camera_keyPress;
+extern "C" bool camera_auto_enabled;
+	//----------------------------------------------------
+	TEST(Assert, empty)
+{
+	GTEST_ASSERT_EQ(true, true);
+}
 
 //----------------------------------------------------
 TEST(tests, issueFoo){
@@ -20,6 +25,13 @@ TEST(tests, issueBar){
 	bool returnValue = func_1;
 	EXPECT_EQ(true, returnValue);
 }
+
+///[issue]https://github.com/Team-10-But-Better/Craft/issues/10
+TEST(tests, issue10){
+	EXPECT_EQ(allow_auto_camera_keyPress, true);
+	EXPECT_EQ(camera_auto_enabled, false);
+}
+
 extern "C" int craft_main(int argc, char* argv[]);
 
 //----------------------------------------------------
