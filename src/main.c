@@ -2966,7 +2966,6 @@ float getVerticalCameraChange(bool up, bool down, float m)
 ///
 ///\param ortho : whether being in ortho mode is desired
 
-
 int getOrtho(bool ortho)
 {
     return ortho ? 64 : 0;
@@ -2995,14 +2994,7 @@ void handle_movement(double dt)
         g->fov = getFOV(glfwGetKey(g->window, CRAFT_KEY_ZOOM));
         sz = getZAxisChange(glfwGetKey(g->window, CRAFT_KEY_FORWARD), glfwGetKey(g->window, CRAFT_KEY_BACKWARD));
         sx = getXAxisChange(glfwGetKey(g->window, CRAFT_KEY_LEFT), glfwGetKey(g->window, CRAFT_KEY_RIGHT));
-
-        /*  if (glfwGetKey(g->window, GLFW_KEY_LEFT))
-            s->rx -= m;
-        if (glfwGetKey(g->window, GLFW_KEY_RIGHT))
-            s->rx += m;*/
-        //s->rx += getHorizontalCameraChange(glfwGetKey(g->window, GLFW_KEY_LEFT), glfwGetKey(g->window, GLFW_KEY_RIGHT), m);
         s->rx += getHorizontalCameraChange(glfwGetKey(g->window, GLFW_KEY_LEFT), glfwGetKey(g->window, GLFW_KEY_RIGHT), m);
-
         s->ry += getVerticalCameraChange(glfwGetKey(g->window, GLFW_KEY_UP), glfwGetKey(g->window, GLFW_KEY_DOWN), m);
     }
     float vx, vy, vz;
