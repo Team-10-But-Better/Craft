@@ -19,6 +19,7 @@
 #include "tinycthread.h"
 #include "util.h"
 #include "world.h"
+#include <stdbool.h>
 
 #define MAX_CHUNKS 8192
 #define MAX_PLAYERS 128
@@ -2408,11 +2409,13 @@ void handle_mouse_input() {
     }
 }
 
-void handle_movement(double dt) {
+void handle_movement(double dt, int *movement_speed_ptr, bool *allow_next_run_key_press_ptr, bool *is_running_ptr) {
     static float dy = 0;
     State *s = &g->players->state;
     int sz = 0;
     int sx = 0;
+    int run_key_state = glfwGetKey(g->window, CRAFT_KEY_ACTIVATE_RUN);
+
     if (!g->typing) {
         float m = dt * 1.0;
         g->ortho = glfwGetKey(g->window, CRAFT_KEY_ORTHO) ? 64 : 0;
@@ -2425,6 +2428,28 @@ void handle_movement(double dt) {
         if (glfwGetKey(g->window, GLFW_KEY_RIGHT)) s->rx += m;
         if (glfwGetKey(g->window, GLFW_KEY_UP)) s->ry += m;
         if (glfwGetKey(g->window, GLFW_KEY_DOWN)) s->ry -= m;
+   
+       if (run_key_state == GLFW_PRESS){
+	
+	if(*is_running_ptr == false && *allow_next_run_key_press_ptr == true)
+	{
+		*movement_speed_ptr = 10;
+		*is_running_ptr = true;
+	}
+
+	else if(*is_running_ptr == true && *allow_next_run_key_press_ptr == true)
+	{
+		 *movement_speed_ptr = 5;
+		 *is_running_ptr = false;
+	}
+	*allow_next_run_key_press_ptr = false;
+       }
+	
+       else if (run_key_state == GLFW_RELEASE)
+	{
+		*allow_next_run_key_press_ptr = true;
+	}
+
     }
     float vx, vy, vz;
     get_motion_vector(g->flying, sz, sx, s->rx, s->ry, &vx, &vy, &vz);
@@ -2438,7 +2463,7 @@ void handle_movement(double dt) {
             }
         }
     }
-    float speed = g->flying ? 20 : 5;
+    float speed = g->flying ? 20 : *movement_speed_ptr;
     int estimate = roundf(sqrtf(
         powf(vx * speed, 2) +
         powf(vy * speed + ABS(dy) * 2, 2) +
@@ -2582,6 +2607,13 @@ void reset_model() {
     glfwSetTime(g->day_length / 3.0);
     g->time_changed = 1;
 }
+
+/**This is set to 5, because the preferred movement speed is 5.*/
+int valueOfMovementSpeed=5;
+/**This will be used to allow/not allow the users run key to register at times*/
+bool valueOfAllowNextRunKeyPress=true;
+/**This will be used to track whether the player character is running or not*/
+bool valueOfIsRunning=false;
 
 int craft_main(int argc, char **argv) {
     // INITIALIZATION //
@@ -2763,6 +2795,11 @@ int craft_main(int argc, char **argv) {
         me->name[0] = '\0';
         me->buffer = 0;
         g->player_count = 1;
+	
+	int movement_speed = valueOfMovementSpeed;
+	bool allow_next_run_key_press = valueOfAllowNextRunKeyPress;
+	bool is_running = valueOfIsRunning;
+
 
         // LOAD STATE FROM DATABASE //
         int loaded = db_load_state(&s->x, &s->y, &s->z, &s->rx, &s->ry);
@@ -2797,7 +2834,14 @@ int craft_main(int argc, char **argv) {
             handle_mouse_input();
 
             // HANDLE MOVEMENT //
-            handle_movement(dt);
+	    int *movement_speed_ptr;
+            bool *allow_next_run_key_press_ptr;
+            bool *is_running_ptr;
+            movement_speed_ptr = &movement_speed;
+            allow_next_run_key_press_ptr = &allow_next_run_key_press;
+            is_running_ptr = &is_running;
+
+	    handle_movement(dt, movement_speed_ptr, allow_next_run_key_press_ptr, is_running_ptr);
 
             // HANDLE DATA FROM SERVER //
             char *buffer = client_recv();
