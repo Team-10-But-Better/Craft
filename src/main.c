@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <stdbool.h>
 #include "auth.h"
 #include "client.h"
 #include "config.h"
@@ -2408,15 +2409,58 @@ void handle_mouse_input() {
     }
 }
 
-void handle_movement(double dt) {
+/// [issue](https://github.com/Team-10-But-Better/Craft/issues/9)
+/// This function returns the movement speed based on whether the character should teleport.
+///
+///\param teleport : whether the character should teleport
+///\param teleportHeldLastFrame : whether the teleport button was previously held
+///\param groundedMovementSpeed : default movement speed
+
+int getGroundedMovementSpeed(bool teleport, bool *teleportHeldLastFrame, int groundedMovementSpeed)
+{
+    if (teleport)
+    {
+        if (*teleportHeldLastFrame == false){
+            *teleportHeldLastFrame = true;
+            return 600;
+        }
+        *teleportHeldLastFrame = true;
+    }
+    else
+    {
+        *teleportHeldLastFrame = false;
+    }
+
+    return groundedMovementSpeed;
+}
+
+void handle_movement(double dt, bool *teleportHeldLastFrame)
+{
     static float dy = 0;
     State *s = &g->players->state;
     int sz = 0;
     int sx = 0;
+    char shouldTeleport = 0;
+    int groundedMovementSpeed = 5;
+
     if (!g->typing) {
         float m = dt * 1.0;
         g->ortho = glfwGetKey(g->window, CRAFT_KEY_ORTHO) ? 64 : 0;
         g->fov = glfwGetKey(g->window, CRAFT_KEY_ZOOM) ? 15 : 65;
+        groundedMovementSpeed = getGroundedMovementSpeed(glfwGetKey(g->window, CRAFT_KEY_TELEPORT), teleportHeldLastFrame, groundedMovementSpeed);
+       /* if (glfwGetKey(g->window, CRAFT_KEY_TELEPORT))
+        {
+            if (!*teleportHeldLastFrame)
+            {
+                groundedMovementSpeed = 600;
+                shouldTeleport = 1;
+            }
+            *teleportHeldLastFrame = 1;
+        }
+        else
+        {
+            *teleportHeldLastFrame = 0;
+        }*/
         if (glfwGetKey(g->window, CRAFT_KEY_FORWARD)) sz--;
         if (glfwGetKey(g->window, CRAFT_KEY_BACKWARD)) sz++;
         if (glfwGetKey(g->window, CRAFT_KEY_LEFT)) sx--;
@@ -2438,7 +2482,7 @@ void handle_movement(double dt) {
             }
         }
     }
-    float speed = g->flying ? 20 : 5;
+    float speed = g->flying ? 20 : groundedMovementSpeed;
     int estimate = roundf(sqrtf(
         powf(vx * speed, 2) +
         powf(vy * speed + ABS(dy) * 2, 2) +
@@ -2757,6 +2801,8 @@ int craft_main(int argc, char **argv) {
         double last_update = glfwGetTime();
         GLuint sky_buffer = gen_sky_buffer();
 
+        bool teleportButtonPressedLastFrame = false;
+
         Player *me = g->players;
         State *s = &g->players->state;
         me->id = 0;
@@ -2797,7 +2843,7 @@ int craft_main(int argc, char **argv) {
             handle_mouse_input();
 
             // HANDLE MOVEMENT //
-            handle_movement(dt);
+            handle_movement(dt, &teleportButtonPressedLastFrame);
 
             // HANDLE DATA FROM SERVER //
             char *buffer = client_recv();
