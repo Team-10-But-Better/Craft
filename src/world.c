@@ -3,8 +3,7 @@
 #include "world.h"
 #include "stdlib.h"
 
-int chooseTree(){
-    int choice = rand() % 3;
+int chooseTree(int choice){
     if(choice >= 1){
         return 0;
     }else{
@@ -57,7 +56,7 @@ void create_world(int p, int q, world_func func, void *arg) {
                     ok = 0;
                 }
                 if (ok && simplex2(x, z, 6, 0.5, 2) > 0.84) {
-                    int treeSize = chooseTree();
+                    int treeSize = chooseTree(rand() % 3);
                     for (int y = h + 3; y < h + 8; y++) {
                         for (int ox = -3; ox <= 3; ox++) {
                             for (int oz = -3; oz <= 3; oz++) {
