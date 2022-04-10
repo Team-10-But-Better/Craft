@@ -23,9 +23,8 @@ TEST(tests, issueBar){
 
 
 extern "C" int craft_main(int argc, char* argv[]);
+
 extern "C" float setJump(int megaJump, float dy);
-
-
 TEST(tests, issue_6){
 	static float returnValue1 =  setJump(1, 0);
 	static float returnValue2 = setJump(0, 0);
@@ -38,8 +37,16 @@ TEST(tests, issue_6){
 	EXPECT_FLOAT_EQ(returnValue4, 1);
 }
 
-	//----------------------------------------------------
-	int main(int argc, char *argv[])
+extern "C" int chooseTree(int choice);
+TEST(tests, issue_32)
+{
+	EXPECT_EQ(chooseTree(0), 10);
+	EXPECT_EQ(chooseTree(1), 0);
+	EXPECT_EQ(chooseTree(2), 0);
+}
+
+//----------------------------------------------------
+int main(int argc, char *argv[])
 {
 	craft_main(argc, argv);
     ::testing::InitGoogleTest(&argc, argv);
