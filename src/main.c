@@ -135,6 +135,7 @@ typedef struct {
     int observe1;
     int observe2;
     int flying;
+    int megaJump;
     int item_index;
     int scale;
     int ortho;
@@ -2250,6 +2251,9 @@ void on_key(GLFWwindow *window, int key, int scancode, int action, int mods) {
         if (key == CRAFT_KEY_FLY) {
             g->flying = !g->flying;
         }
+        if (key == CRAFT_KEY_MEGAJUMP) {
+            g->megaJump = !g->megaJump;
+        }
         if (key >= '1' && key <= '9') {
             g->item_index = key - '1';
         }
@@ -2408,6 +2412,23 @@ void handle_mouse_input() {
     }
 }
 
+
+float setJump(int megaJump, float dy)
+{
+    if ((megaJump) && (dy == 0))
+    {
+        dy = 40;
+        
+    }
+    else if (dy == 0)
+    {
+        dy = 8;
+        
+    }
+    
+    return dy;
+}
+
 void handle_movement(double dt) {
     static float dy = 0;
     State *s = &g->players->state;
@@ -2432,9 +2453,8 @@ void handle_movement(double dt) {
         if (glfwGetKey(g->window, CRAFT_KEY_JUMP)) {
             if (g->flying) {
                 vy = 1;
-            }
-            else if (dy == 0) {
-                dy = 8;
+            }else{
+                dy = setJump(g->megaJump, dy);
             }
         }
     }
