@@ -1,6 +1,16 @@
 #include "config.h"
 #include "noise.h"
 #include "world.h"
+#include "stdlib.h"
+
+int chooseTree(int choice){
+    if(choice >= 1){
+        return 0;
+    }else{
+        return 10;
+    }
+
+}
 
 void create_world(int p, int q, world_func func, void *arg) {
     int pad = 1;
@@ -46,18 +56,20 @@ void create_world(int p, int q, world_func func, void *arg) {
                     ok = 0;
                 }
                 if (ok && simplex2(x, z, 6, 0.5, 2) > 0.84) {
+                    int treeSize = chooseTree(rand() % 3);
                     for (int y = h + 3; y < h + 8; y++) {
                         for (int ox = -3; ox <= 3; ox++) {
                             for (int oz = -3; oz <= 3; oz++) {
                                 int d = (ox * ox) + (oz * oz) +
                                     (y - (h + 4)) * (y - (h + 4));
                                 if (d < 11) {
-                                    func(x + ox, y, z + oz, 15, arg);
+                                    func(x + ox, y + treeSize, z + oz, 15, arg);
                                 }
                             }
                         }
                     }
-                    for (int y = h; y < h + 7; y++) {
+                    for (int y = h; y < h + 7 + treeSize; y++)
+                    {
                         func(x, y, z, 5, arg);
                     }
                 }

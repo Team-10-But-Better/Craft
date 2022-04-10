@@ -20,10 +20,33 @@ TEST(tests, issueBar){
 	bool returnValue = func_1;
 	EXPECT_EQ(true, returnValue);
 }
+
+
 extern "C" int craft_main(int argc, char* argv[]);
 
+extern "C" float setJump(int megaJump, float dy);
+TEST(tests, issue_6){
+	static float returnValue1 =  setJump(1, 0);
+	static float returnValue2 = setJump(0, 0);
+	static float returnValue3 = setJump(0, 1);
+	static float returnValue4 = setJump(1, 1);
+
+	EXPECT_FLOAT_EQ(returnValue1, 40);
+	EXPECT_FLOAT_EQ(returnValue2, 8);
+	EXPECT_FLOAT_EQ(returnValue3, 1);
+	EXPECT_FLOAT_EQ(returnValue4, 1);
+}
+
+extern "C" int chooseTree(int choice);
+TEST(tests, issue_32)
+{
+	EXPECT_EQ(chooseTree(0), 10);
+	EXPECT_EQ(chooseTree(1), 0);
+	EXPECT_EQ(chooseTree(2), 0);
+}
+
 //----------------------------------------------------
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
 	craft_main(argc, argv);
     ::testing::InitGoogleTest(&argc, argv);
