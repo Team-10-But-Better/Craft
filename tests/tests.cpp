@@ -21,7 +21,7 @@ extern "C" void setDefaultDPI();
 /// Externals used for testing [Issue #41]: https://github.com/Team-10-But-Better/Craft/issues/41
 extern "C" int isDefinedCraftKey(char *str, int start, int end);
 
-// Externals used for testing [Issue: #66]: https://github.com/Team-10-But-Better/Craft/issues/66
+/// Externals used for testing [Issue: #66]: https://github.com/Team-10-But-Better/Craft/issues/66
 typedef struct
 {
 	double health;
@@ -95,8 +95,8 @@ TEST(tests, issue41)
 	EXPECT_EQ(isDefinedCraftKey("#define CRAFT_KEY_TESTING_ISSUE_41", 8, 13), 1) << "Issue 41 Testing Error 2: test found string to not be a defined CRAFT keybind\n";
 }
 
-// As a part of [Issue #66]: https://github.com/Team-10-But-Better/Craft/issues/66
-// Add a test to show that a player has a measure of health
+/// As a part of [Issue #66]: https://github.com/Team-10-But-Better/Craft/issues/66
+/// Add a test to show that a player has a measure of health
 TEST(tests, issue66health)
 {
 	EXPECT_EQ(playerStatus.health, 0) << "Issue 66 Testing Health Error 1: Health was not uninitialized.\n";
@@ -104,8 +104,8 @@ TEST(tests, issue66health)
 	EXPECT_EQ(playerStatus.health, 10) << "Issue 66 Testing Health Error 2: Health was not initialized to 10.\n";
 }
 
-// As a part of [Issue #66]: https://github.com/Team-10-But-Better/Craft/issues/66
-// Add a test to show that a player can take fall damage
+/// As a part of [Issue #66]: https://github.com/Team-10-But-Better/Craft/issues/66
+/// Add a test to show that a player can take fall damage
 TEST(tests, issue66fallDamage)
 {
 	EXPECT_EQ(playerStatus.health, 10) << "Issue 66 Testing Fall Damage Error 1: Player's health was not set to 10.\n";
