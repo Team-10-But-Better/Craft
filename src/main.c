@@ -19,6 +19,7 @@
 #include "tinycthread.h"
 #include "util.h"
 #include "world.h"
+#include "stdbool.h"
 
 #define MAX_CHUNKS 8192
 #define MAX_PLAYERS 128
@@ -2408,11 +2409,13 @@ void handle_mouse_input() {
     }
 }
 
-void handle_movement(double dt) {
+void handle_movement(double dt, bool *allow_binocular_mode_keyPress_ptr, bool *binocular_mode_enabled_ptr)
+{
     static float dy = 0;
     State *s = &g->players->state;
     int sz = 0;
     int sx = 0;
+    int binocular_mode_key_state = glfwGetKey(g->window, CRAFT_BINOCULAR_MODE);
     if (!g->typing) {
         float m = dt * 1.0;
         g->ortho = glfwGetKey(g->window, CRAFT_KEY_ORTHO) ? 64 : 0;
@@ -2425,7 +2428,31 @@ void handle_movement(double dt) {
         if (glfwGetKey(g->window, GLFW_KEY_RIGHT)) s->rx += m;
         if (glfwGetKey(g->window, GLFW_KEY_UP)) s->ry += m;
         if (glfwGetKey(g->window, GLFW_KEY_DOWN)) s->ry -= m;
+
+        //Enable and Disable logic for binocular view mode
+        if (binocular_mode_key_state == GLFW_PRESS)
+        {
+            if (*binocular_mode_enabled_ptr == false && *allow_binocular_mode_keyPress_ptr == true)
+            {
+                *binocular_mode_enabled_ptr = true;
+            }
+            else if (*binocular_mode_enabled_ptr == true && *allow_binocular_mode_keyPress_ptr == true)
+            {
+                *binocular_mode_enabled_ptr = false;
+            }
+            *allow_binocular_mode_keyPress_ptr = false;
+        }
+        else if (binocular_mode_key_state == GLFW_RELEASE)
+        {
+            *allow_binocular_mode_keyPress_ptr = true;
+        }
     }
+
+    if (*binocular_mode_enabled_ptr == true)
+    {
+        g->fov = 15;
+    }
+
     float vx, vy, vz;
     get_motion_vector(g->flying, sz, sx, s->rx, s->ry, &vx, &vy, &vz);
     if (!g->typing) {
@@ -2582,6 +2609,11 @@ void reset_model() {
     glfwSetTime(g->day_length / 3.0);
     g->time_changed = 1;
 }
+
+/**This will be used to allowed/not allowed binocular view mode key press to enable.*/
+bool allow_binocular_mode_keyPress = true;
+/**This will be used to track binocular view mode is enabled or not.*/
+bool binocular_mode_enabled = false;
 
 int craft_main(int argc, char **argv) {
     // INITIALIZATION //
@@ -2797,7 +2829,12 @@ int craft_main(int argc, char **argv) {
             handle_mouse_input();
 
             // HANDLE MOVEMENT //
-            handle_movement(dt);
+            bool *allow_binocular_mode_keyPress_ptr;
+            bool *binocular_mode_enabled_ptr;
+            allow_binocular_mode_keyPress_ptr = &allow_binocular_mode_keyPress;
+            binocular_mode_enabled_ptr = &binocular_mode_enabled;
+
+            handle_movement(dt, allow_binocular_mode_keyPress_ptr, binocular_mode_enabled_ptr);
 
             // HANDLE DATA FROM SERVER //
             char *buffer = client_recv();
