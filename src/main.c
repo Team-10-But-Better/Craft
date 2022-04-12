@@ -2440,7 +2440,7 @@ void handle_movement(double dt, bool *teleportHeldLastFrame)
     State *s = &g->players->state;
     int sz = 0;
     int sx = 0;
-    char shouldTeleport = 0;
+    bool shouldTeleport = 0;
     int groundedMovementSpeed = 5;
 
     if (!g->typing) {
@@ -2448,19 +2448,7 @@ void handle_movement(double dt, bool *teleportHeldLastFrame)
         g->ortho = glfwGetKey(g->window, CRAFT_KEY_ORTHO) ? 64 : 0;
         g->fov = glfwGetKey(g->window, CRAFT_KEY_ZOOM) ? 15 : 65;
         groundedMovementSpeed = getGroundedMovementSpeed(glfwGetKey(g->window, CRAFT_KEY_TELEPORT), teleportHeldLastFrame, groundedMovementSpeed);
-       /* if (glfwGetKey(g->window, CRAFT_KEY_TELEPORT))
-        {
-            if (!*teleportHeldLastFrame)
-            {
-                groundedMovementSpeed = 600;
-                shouldTeleport = 1;
-            }
-            *teleportHeldLastFrame = 1;
-        }
-        else
-        {
-            *teleportHeldLastFrame = 0;
-        }*/
+       
         if (glfwGetKey(g->window, CRAFT_KEY_FORWARD)) sz--;
         if (glfwGetKey(g->window, CRAFT_KEY_BACKWARD)) sz++;
         if (glfwGetKey(g->window, CRAFT_KEY_LEFT)) sx--;
