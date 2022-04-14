@@ -2434,7 +2434,7 @@ int getGroundedMovementSpeed(bool teleport, bool *teleportHeldLastFrame, int gro
     return groundedMovementSpeed;
 }
 
-void handle_movement(double dt, bool *teleportHeldLastFrame)
+void handle_movement(double dt, bool *teleportHeldLastFrame, bool *crouching, bool *crouchHeldLastFrame)
 {
     static float dy = 0;
     State *s = &g->players->state;
@@ -2790,6 +2790,8 @@ int craft_main(int argc, char **argv) {
         GLuint sky_buffer = gen_sky_buffer();
 
         bool teleportButtonPressedLastFrame = false;
+        bool crouching = false;
+        bool crouchingButtonPressedLastFrame = false;
 
         Player *me = g->players;
         State *s = &g->players->state;
@@ -2831,7 +2833,7 @@ int craft_main(int argc, char **argv) {
             handle_mouse_input();
 
             // HANDLE MOVEMENT //
-            handle_movement(dt, &teleportButtonPressedLastFrame);
+            handle_movement(dt, &teleportButtonPressedLastFrame, crouching, crouchingButtonPressedLastFrame);
 
             // HANDLE DATA FROM SERVER //
             char *buffer = client_recv();
