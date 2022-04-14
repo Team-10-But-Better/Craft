@@ -9,6 +9,8 @@
 
 extern "C" bool helloWorld;
 extern "C" bool func_1();
+extern "C" bool allow_binocular_mode_keyPress;
+extern "C" bool binocular_mode_enabled;
 //----------------------------------------------------
 TEST(Assert, empty) { GTEST_ASSERT_EQ(true, true); }
 
@@ -20,6 +22,13 @@ TEST(tests, issueBar){
 	bool returnValue = func_1;
 	EXPECT_EQ(true, returnValue);
 }
+
+///[issue]https://github.com/Team-10-But-Better/Craft/issues/64
+TEST(tests, issue64){
+	EXPECT_EQ(allow_binocular_mode_keyPress, true);
+	EXPECT_EQ(binocular_mode_enabled, false);
+}
+
 extern "C" int craft_main(int argc, char* argv[]);
 
 //----------------------------------------------------
