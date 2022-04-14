@@ -2434,6 +2434,22 @@ int getGroundedMovementSpeed(bool teleport, bool *teleportHeldLastFrame, int gro
     return groundedMovementSpeed;
 }
 
+int getCrouchingHeight(bool crouch, bool *crouchingHeldLastFrame)
+{
+    if(crouch){
+        if(*crouchingHeldLastFrame == false){
+            *crouchingHeldLastFrame = true;
+            return 1;
+        }
+        *crouchingHeldLastFrame = true;
+    }
+    else{
+        *crouchingHeldLastFrame = false;
+    }
+
+    return 2;
+}
+
 void handle_movement(double dt, bool *teleportHeldLastFrame, bool *crouching, bool *crouchHeldLastFrame)
 {
     static float dy = 0;
