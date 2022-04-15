@@ -3466,6 +3466,8 @@ int craft_main(int argc, char **argv)
         int fallCount = 0;
         int fallDamage = 0;
 
+        int time = 0;
+
         // BEGIN MAIN LOOP //
         double previous = glfwGetTime();
         while (1)
@@ -3497,6 +3499,26 @@ int craft_main(int argc, char **argv)
             // HANDLE MOVEMENT //
             handle_movement(dt);
 
+            /// As a part of [Issue #72]: https://github.com/Team-10-But-Better/Craft/issues/72
+            /// After a certain amount of time, decrement a player's health by 1 point
+            time++;
+            if (time > 1000)
+            {
+                time = 0;
+                if (playerStatus.hunger > 0)
+                    playerStatus.hunger--;
+                if (playerStatus.hunger == 0)
+                {
+                    if (playerStatus.health > 0)
+                        playerStatus.health--;
+                    else
+                        printf("Player has died from starvation.\n");
+                }
+            }
+            printf("Time: %i\n", time);
+            printf("Hunger: %f\n", playerStatus.hunger);
+            printf("Health: %f\n", playerStatus.health);
+
             /// As a part of [Issue #59]:https://github.com/Team-10-But-Better/Craft/issues/59
             /// If the change in the player's height is more than 4 blocks, make that player take fall damage.
             if (!get_block(s->x, s->y - 1, s->z))
@@ -3513,7 +3535,7 @@ int craft_main(int argc, char **argv)
             {
                 falling = 0;
                 fallCount = 0;
-                takeFallDamage(fallDamage);
+                //takeFallDamage(fallDamage);
                 fallDamage = 0;
             }
 
