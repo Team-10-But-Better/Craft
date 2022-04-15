@@ -22,6 +22,7 @@ extern "C" void setDefaultDPI();
 extern "C" int isDefinedCraftKey(char *str, int start, int end);
 
 /// Externals used for testing [Issue: #66]: https://github.com/Team-10-But-Better/Craft/issues/66
+/// playerStatus is also used for testing [Issue #72]: https://github.com/Team-10-But-Better/Craft/issues/72
 typedef struct
 {
 	double health;
@@ -99,10 +100,10 @@ TEST(tests, issue41)
 /// Add a test to show that a player has a measure of health
 TEST(tests, issue66health)
 {
-	EXPECT_EQ(playerStatus.health, 0) << "Issue 66 Testing Health Error 1: Health was not uninitialized.\n";
 	initializeSurvivalStatus();
-	EXPECT_EQ(playerStatus.health, 10) << "Issue 66 Testing Health Error 2: Health was not initialized to 10.\n";
+	EXPECT_EQ(playerStatus.health, 10) << "Issue 66 Testing Health Error 1: Health was not initialized to 10.\n";
 }
+
 
 /// As a part of [Issue #66]: https://github.com/Team-10-But-Better/Craft/issues/66
 /// Add a test to show that a player can take fall damage
@@ -113,6 +114,38 @@ TEST(tests, issue66fallDamage)
 	EXPECT_EQ(playerStatus.health, 9) << "Issue 66 Testing Fall Damage Error 2: Player's health was not decremented by 1.\n";
 	takeFallDamage(10);
 	EXPECT_EQ(playerStatus.health, 0) << "Issue 66 Testing Fall Damage Error 3: Player's health was not decremented to the minimum: 0.\n";
+}
+
+/// As a part of [Issue #72]: https://github.com/Team-10-But-Better/Craft/issues/72
+/// Add a test to show that a player's hunger can be measured
+TEST(tests, issue77hunger)
+{
+	EXPECT_EQ(playerStatus.hunger, 10) << "Issue 72 Testing Hunger Error 1: Player's hunger was not set to 10.\n";
+	int time = 0;
+	for (int i = 0; i <= 1001; i++)
+	{
+		time++;
+	}
+	if (time > 1000)
+	{
+		playerStatus.hunger--;
+		time = 0;
+	}
+	EXPECT_EQ(playerStatus.hunger, 9) << "Issue 72 Testing Hunger Error 2: Player's hunger was not 9 after first time period.\n";
+	for (int i = 0; i < 10; i++)
+	{
+		for (int j = 0; j <= 1001; j++)
+		{
+			time++;
+		}
+		if (time > 1000)
+		{
+			if (playerStatus.hunger > 0)
+				playerStatus.hunger--;
+			time = 0;
+		}
+	}
+	EXPECT_EQ(playerStatus.hunger, 0) << "Issue 72 Testing Hunger Error 3: Player's hunger was not 0 after max time periods.\n";
 }
 extern "C" int craft_main(int argc, char *argv[]);
 
