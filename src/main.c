@@ -156,6 +156,9 @@ typedef struct {
 static Model model;
 static Model *g = &model;
 
+float CRAFT_KEY_HIGH_FLY_HEIGHT = 35;
+float vy;
+
 int chunked(float x) {
     return floorf(roundf(x) / CHUNK_SIZE);
 }
@@ -2426,7 +2429,8 @@ void handle_movement(double dt) {
         if (glfwGetKey(g->window, GLFW_KEY_UP)) s->ry += m;
         if (glfwGetKey(g->window, GLFW_KEY_DOWN)) s->ry -= m;
     }
-    float vx, vy, vz;
+    //float vx, vy, vz;
+    float vx, vz;
     get_motion_vector(g->flying, sz, sx, s->rx, s->ry, &vx, &vy, &vz);
     if (!g->typing) {
         if (glfwGetKey(g->window, CRAFT_KEY_JUMP)) {
@@ -2439,7 +2443,7 @@ void handle_movement(double dt) {
         }
         if (glfwGetKey(g->window, CRAFT_KEY_HIGH_FLY)) {
             if (g->flying){
-                vy = 35;
+                vy = CRAFT_KEY_HIGH_FLY_HEIGHT;
             }
         }
     }

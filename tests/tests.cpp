@@ -9,6 +9,8 @@
 
 extern "C" bool helloWorld;
 extern "C" bool func_1();
+extern "C" float CRAFT_KEY_HIGH_FLY_HEIGHT;
+extern "C" float vy;
 //----------------------------------------------------
 TEST(Assert, empty) { GTEST_ASSERT_EQ(true, true); }
 
@@ -19,6 +21,10 @@ TEST(tests, issueFoo){
 TEST(tests, issueBar){
 	bool returnValue = func_1;
 	EXPECT_EQ(true, returnValue);
+}
+TEST(tests, issue75){
+	EXPECT_EQ(CRAFT_KEY_HIGH_FLY_HEIGHT, 35);
+	EXPECT_EQ(vy, 0);
 }
 extern "C" int craft_main(int argc, char* argv[]);
 
