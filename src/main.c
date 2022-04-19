@@ -2247,7 +2247,7 @@ void on_key(GLFWwindow *window, int key, int scancode, int action, int mods) {
         }
     }
     if (!g->typing) {
-        if (key == CRAFT_KEY_FLY) {
+        if (key == CRAFT_KEY_FLY || key == CRAFT_KEY_HIGH_FLY) {
             g->flying = !g->flying;
         }
         if (key >= '1' && key <= '9') {
@@ -2438,7 +2438,6 @@ void handle_movement(double dt) {
             }
         }
         if (glfwGetKey(g->window, CRAFT_KEY_HIGH_FLY)) {
-            g->flying = !g->flying;
             if (g->flying){
                 vy = 35;
             }
