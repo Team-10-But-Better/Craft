@@ -2557,7 +2557,7 @@ void on_light()
     }
 }
 
-void on_left_click()
+int on_left_click()
 {
     State *s = &g->players->state;
     int hx, hy, hz;
@@ -2570,7 +2570,13 @@ void on_left_click()
         {
             set_block(hx, hy + 1, hz, 0);
         }
+
+        /// As a part of [Issue #80]: https://github.com/Team-10-But-Better/Craft/issues/80
+        /// Increment enchantment level everytime a block is destroyed
+        playerStatus.enchant++;
+        return 1;
     }
+    return 0;
 }
 
 void on_right_click()
@@ -3254,6 +3260,15 @@ void reset_model()
     g->time_changed = 1;
 }
 
+/// Method used to debug survivalStatus
+void printSurvivalStatus(int time)
+{
+    printf("Time:    %i\n", time);
+    printf("Health:  %f\n", playerStatus.health);
+    printf("Hunger:  %f\n", playerStatus.hunger);
+    printf("Enchant: %f\n", playerStatus.enchant);
+}
+
 int craft_main(int argc, char **argv)
 {
     // INITIALIZATION //
@@ -3500,7 +3515,8 @@ int craft_main(int argc, char **argv)
             handle_movement(dt);
 
             /// As a part of [Issue #72]: https://github.com/Team-10-But-Better/Craft/issues/72
-            /// After a certain amount of time, decrement a player's health by 1 point
+            /// After a certain amount of time, decrement a player's hunger by 1 point
+            /// If that player's hunger cannot be decremented any further, decrement their health instead
             time++;
             if (time > 1000)
             {
@@ -3515,9 +3531,9 @@ int craft_main(int argc, char **argv)
                         printf("Player has died from starvation.\n");
                 }
             }
-            printf("Time: %i\n", time);
-            printf("Hunger: %f\n", playerStatus.hunger);
-            printf("Health: %f\n", playerStatus.health);
+            
+            // Debugging: print player's survivalStatus
+            printSurvivalStatus(time);
 
             /// As a part of [Issue #59]:https://github.com/Team-10-But-Better/Craft/issues/59
             /// If the change in the player's height is more than 4 blocks, make that player take fall damage.

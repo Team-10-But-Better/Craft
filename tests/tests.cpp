@@ -33,6 +33,9 @@ extern "C" SurvivalStatus playerStatus;
 extern "C" void takeFallDamage(int damage);
 extern "C" void initializeSurvivalStatus();
 
+/// Externals used for testing [Issue #80]: https://github.com/Team-10-But-Better/Craft/issues/80
+extern "C" int on_left_click();
+
 //----------------------------------------------------
 TEST(Assert, empty)
 {
@@ -146,6 +149,22 @@ TEST(tests, issue77hunger)
 		}
 	}
 	EXPECT_EQ(playerStatus.hunger, 0) << "Issue 72 Testing Hunger Error 3: Player's hunger was not 0 after max time periods.\n";
+}
+
+/// As a part of [Issue #80]: https://github.com/Team-10-But-Better/Craft/issues/80
+/// Add a way to test that enchantment level is being incremented
+TEST(tests, issue80enchant)
+{
+	initializeSurvivalStatus();
+	EXPECT_EQ(playerStatus.enchant, 0) << "Issue 80 Testing Enchant Error 1: Player's enchantment level was not initialized to 0.\n";
+	if (on_left_click() == 1)
+	{
+		EXPECT_EQ(playerStatus.enchant, 1) << "Issue 80 Testing Enchant Error 2: Player's enchantment level was not incremented after destroying a block.\n";
+	}
+	else
+	{
+		EXPECT_EQ(playerStatus.enchant, 0) << "Issue 80 Testing Enchant Error 3: Player's enchantment level was incremented even though a block was not destroyed.\n";
+	}
 }
 extern "C" int craft_main(int argc, char *argv[]);
 
