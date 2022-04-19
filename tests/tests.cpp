@@ -11,11 +11,8 @@ extern "C" bool helloWorld;
 extern "C" bool func_1();
 extern "C" bool allow_auto_camera_keyPress;
 extern "C" bool camera_auto_enabled;
-	//----------------------------------------------------
-	TEST(Assert, empty)
-{
-	GTEST_ASSERT_EQ(true, true);
-}
+//----------------------------------------------------
+TEST(Assert, empty) { GTEST_ASSERT_EQ(true, true); }
 
 //----------------------------------------------------
 TEST(tests, issueFoo){
