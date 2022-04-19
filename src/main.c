@@ -156,8 +156,8 @@ typedef struct {
 static Model model;
 static Model *g = &model;
 
-/**This will be used to set height we need instantly to fly high.*/
-float CRAFT_KEY_HIGH_FLY_HEIGHT = 35;
+/**This will be used to allow the player character the ability to instantly fly high, via a height value*/
+float FLY_HEIGHT = 35;
 float vy;
 
 int chunked(float x) {
@@ -2251,8 +2251,8 @@ void on_key(GLFWwindow *window, int key, int scancode, int action, int mods) {
         }
     }
     if (!g->typing) {
-        /**This condition is modified to enable instant High fly mode.*/
-        if (key == CRAFT_KEY_FLY || key == CRAFT_KEY_HIGH_FLY) {
+        /**This condition is modified to allow user key press to initiate "Fly high"*/
+        if (key == CRAFT_KEY_FLY || key == CRAFT_KEY_FLY_HIGH) {
             g->flying = !g->flying;
         }
         if (key >= '1' && key <= '9') {
@@ -2442,10 +2442,10 @@ void handle_movement(double dt) {
                 dy = 8;
             }
         }
-        /**This condition is used to implement logic for instant high fly feature.*/
-        if (glfwGetKey(g->window, CRAFT_KEY_HIGH_FLY)) {
+        /**This condition is used to implement logic for instant fly high feature.*/
+        if (glfwGetKey(g->window, CRAFT_KEY_FLY_HIGH)) {
             if (g->flying){
-                vy = CRAFT_KEY_HIGH_FLY_HEIGHT;
+                vy = FLY_HEIGHT;
             }
         }
     }

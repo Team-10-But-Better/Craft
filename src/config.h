@@ -42,7 +42,7 @@
 #define CRAFT_KEY_CHAT 't'
 #define CRAFT_KEY_COMMAND '/'
 #define CRAFT_KEY_SIGN '`'
-#define CRAFT_KEY_HIGH_FLY 'H'
+#define CRAFT_KEY_FLY_HIGH 'H'
 
 // advanced parameters
 #define CREATE_CHUNK_RADIUS 10
