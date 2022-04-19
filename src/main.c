@@ -2793,8 +2793,6 @@ int craft_main(int argc, char **argv) {
         me->name[0] = '\0';
         me->buffer = 0;
         g->player_count = 1;
-        //bool allow_auto_camera_keyPress = true;
-        //bool camera_auto_enabled = false;
 
         // LOAD STATE FROM DATABASE //
         int loaded = db_load_state(&s->x, &s->y, &s->z, &s->rx, &s->ry);
