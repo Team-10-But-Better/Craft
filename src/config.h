@@ -43,6 +43,7 @@
 #define CRAFT_KEY_COMMAND '/'
 #define CRAFT_KEY_SIGN '`'
 #define CRAFT_KEY_TELEPORT 'U'
+#define CRAFT_KEY_CROUCH 'C'
 
 // advanced parameters
 #define CREATE_CHUNK_RADIUS 10

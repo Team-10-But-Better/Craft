@@ -2437,34 +2437,46 @@ int getGroundedMovementSpeed(bool teleport, bool *teleportHeldLastFrame, int gro
 int getCrouchingHeight(bool crouch, bool *crouchingHeldLastFrame)
 {
     if(crouch){
-        if(*crouchingHeldLastFrame == false){
-            *crouchingHeldLastFrame = true;
-            return 1;
-        }
         *crouchingHeldLastFrame = true;
     }
     else{
         *crouchingHeldLastFrame = false;
     }
 
-    return 2;
+    return crouch ? 1 : 2;
 }
 
-void handle_movement(double dt, bool *teleportHeldLastFrame, bool *crouching, bool *crouchHeldLastFrame)
+bool isCrouching(bool crouching){
+    return crouching;
+}
+
+void handle_movement(double dt, bool *teleportHeldLastFrame, bool *crouchHeldLastFrame)
 {
     static float dy = 0;
     State *s = &g->players->state;
     int sz = 0;
     int sx = 0;
     bool shouldTeleport = 0;
-    int groundedMovementSpeed = 5;
+    bool previouslyCrouching = *crouchHeldLastFrame;
+    //these variable are used to get the default standing height
+    
+    int previousHeight = 0;
+    int height = 2;
 
-    if (!g->typing) {
+    int groundedMovementSpeed = 5;
+    int differenceBetweenPreviousHeightAndCurrentHeight = 0;
+
+        if (!g->typing)
+    {
         float m = dt * 1.0;
         g->ortho = glfwGetKey(g->window, CRAFT_KEY_ORTHO) ? 64 : 0;
         g->fov = glfwGetKey(g->window, CRAFT_KEY_ZOOM) ? 15 : 65;
         groundedMovementSpeed = getGroundedMovementSpeed(glfwGetKey(g->window, CRAFT_KEY_TELEPORT), teleportHeldLastFrame, groundedMovementSpeed);
-       
+        height = getCrouchingHeight(glfwGetKey(g->window, CRAFT_KEY_CROUCH), crouchHeldLastFrame);
+        //get the character's height last frame
+        bool crouchingValue = false;
+        previousHeight = getCrouchingHeight(*crouchHeldLastFrame, &crouchingValue);
+        differenceBetweenPreviousHeightAndCurrentHeight = previousHeight - height;
         if (glfwGetKey(g->window, CRAFT_KEY_FORWARD)) sz--;
         if (glfwGetKey(g->window, CRAFT_KEY_BACKWARD)) sz++;
         if (glfwGetKey(g->window, CRAFT_KEY_LEFT)) sx--;
@@ -2486,6 +2498,12 @@ void handle_movement(double dt, bool *teleportHeldLastFrame, bool *crouching, bo
             }
         }
     }
+
+    if (!isCrouching(glfwGetKey(g->window, CRAFT_KEY_CROUCH)) && previouslyCrouching)
+    {
+        s->y += 1;
+    }
+
     float speed = g->flying ? 20 : groundedMovementSpeed;
     int estimate = roundf(sqrtf(
         powf(vx * speed, 2) +
@@ -2504,10 +2522,22 @@ void handle_movement(double dt, bool *teleportHeldLastFrame, bool *crouching, bo
             dy -= ut * 25;
             dy = MAX(dy, -250);
         }
+
+        
+
         s->x += vx;
         s->y += vy + dy * ut;
+        /*if (isCrouching(glfwGetKey(g->window, CRAFT_KEY_CROUCH)) != *crouchHeldLastFrame)
+        {
+            s->y -= differenceBetweenPreviousHeightAndCurrentHeight;
+        }*/
+
+        
+
         s->z += vz;
-        if (collide(2, &s->x, &s->y, &s->z)) {
+        
+
+        if (collide(height, &s->x, &s->y, &s->z)) {
             dy = 0;
         }
     }
@@ -2806,7 +2836,6 @@ int craft_main(int argc, char **argv) {
         GLuint sky_buffer = gen_sky_buffer();
 
         bool teleportButtonPressedLastFrame = false;
-        bool crouching = false;
         bool crouchingButtonPressedLastFrame = false;
 
         Player *me = g->players;
@@ -2849,7 +2878,7 @@ int craft_main(int argc, char **argv) {
             handle_mouse_input();
 
             // HANDLE MOVEMENT //
-            handle_movement(dt, &teleportButtonPressedLastFrame, crouching, crouchingButtonPressedLastFrame);
+            handle_movement(dt, &teleportButtonPressedLastFrame, &crouchingButtonPressedLastFrame);
 
             // HANDLE DATA FROM SERVER //
             char *buffer = client_recv();
