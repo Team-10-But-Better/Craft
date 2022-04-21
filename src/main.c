@@ -2434,6 +2434,13 @@ int getGroundedMovementSpeed(bool teleport, bool *teleportHeldLastFrame, int gro
     return groundedMovementSpeed;
 }
 
+/// [issue](https://github.com/Team-10-But-Better/Craft/issues/69)
+/// This function returns what height the character should be at (depending on if they are crouching)
+/// and changes the pointer that holds whether the character was crouching last frame
+///
+///\param crouch : whether the character should crouch
+///\param crouchingHeldLastFrame : whether the crouch button was held last frame
+
 int getCrouchingHeight(bool crouch, bool *crouchingHeldLastFrame)
 {
     if(crouch){
@@ -2446,8 +2453,12 @@ int getCrouchingHeight(bool crouch, bool *crouchingHeldLastFrame)
     return crouch ? 1 : 2;
 }
 
-bool isCrouching(bool crouching){
-    return crouching;
+/// [issue](https://github.com/Team-10-But-Better/Craft/issues/69)
+/// This function returns whether the character should be crouching
+///
+///\param crouch : whether the character should crouch
+bool isCrouching(bool crouch){
+    return crouch;
 }
 
 void handle_movement(double dt, bool *teleportHeldLastFrame, bool *crouchHeldLastFrame)
@@ -2475,7 +2486,7 @@ void handle_movement(double dt, bool *teleportHeldLastFrame, bool *crouchHeldLas
         height = getCrouchingHeight(glfwGetKey(g->window, CRAFT_KEY_CROUCH), crouchHeldLastFrame);
         //get the character's height last frame
         bool crouchingValue = false;
-        previousHeight = getCrouchingHeight(*crouchHeldLastFrame, &crouchingValue);
+        previousHeight = getCrouchingHeight(previouslyCrouching, &crouchingValue);
         differenceBetweenPreviousHeightAndCurrentHeight = previousHeight - height;
         if (glfwGetKey(g->window, CRAFT_KEY_FORWARD)) sz--;
         if (glfwGetKey(g->window, CRAFT_KEY_BACKWARD)) sz++;
@@ -2499,9 +2510,11 @@ void handle_movement(double dt, bool *teleportHeldLastFrame, bool *crouchHeldLas
         }
     }
 
+    //the hit detection for the model is moved down when crouching, 
+    //so we want to move the character up after leaving crouching
     if (!isCrouching(glfwGetKey(g->window, CRAFT_KEY_CROUCH)) && previouslyCrouching)
     {
-        s->y += 1;
+        s->y -= differenceBetweenPreviousHeightAndCurrentHeight;
     }
 
     float speed = g->flying ? 20 : groundedMovementSpeed;
@@ -2527,16 +2540,12 @@ void handle_movement(double dt, bool *teleportHeldLastFrame, bool *crouchHeldLas
 
         s->x += vx;
         s->y += vy + dy * ut;
-        /*if (isCrouching(glfwGetKey(g->window, CRAFT_KEY_CROUCH)) != *crouchHeldLastFrame)
-        {
-            s->y -= differenceBetweenPreviousHeightAndCurrentHeight;
-        }*/
+     
 
         
 
         s->z += vz;
         
-
         if (collide(height, &s->x, &s->y, &s->z)) {
             dy = 0;
         }
