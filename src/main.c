@@ -20,6 +20,7 @@
 #include "util.h"
 #include "world.h"
 #include "stdbool.h"
+#include <assert.h>
 
 #define MAX_CHUNKS 8192
 #define MAX_PLAYERS 128
@@ -2411,6 +2412,16 @@ void handle_mouse_input() {
 
 void handle_movement(double dt, bool *allow_binocular_mode_keyPress_ptr, bool *binocular_mode_enabled_ptr)
 {
+
+    /******************************************************************************************
+     * Begin Programming by contract (preconditions)
+     * ****************************************************************************************/
+    assert(NULL != allow_binocular_mode_keyPress_ptr);
+    assert(NULL != binocular_mode_enabled_ptr);
+    /******************************************************************************************
+     * Begin Programming by contract (preconditions)
+     * ****************************************************************************************/
+
     static float dy = 0;
     State *s = &g->players->state;
     int sz = 0;
@@ -2452,6 +2463,15 @@ void handle_movement(double dt, bool *allow_binocular_mode_keyPress_ptr, bool *b
     {
         g->fov = 15;
     }
+
+    /******************************************************************************************
+     * Begin Programming by contract (postconditions)
+     * ****************************************************************************************/
+    assert(allow_binocular_mode_keyPress_ptr);
+    assert(binocular_mode_enabled_ptr);
+    /******************************************************************************************
+     * Begin Programming by contract (postconditions)
+     * ****************************************************************************************/
 
     float vx, vy, vz;
     get_motion_vector(g->flying, sz, sx, s->rx, s->ry, &vx, &vy, &vz);
