@@ -19,6 +19,7 @@
 #include "tinycthread.h"
 #include "util.h"
 #include "world.h"
+#include <assert.h>
 
 #define MAX_CHUNKS 8192
 #define MAX_PLAYERS 128
@@ -2442,12 +2443,29 @@ void handle_movement(double dt) {
                 dy = 8;
             }
         }
+
+        /******************************************************************************************
+        * Begin Programming by contract (preconditions)
+        * ****************************************************************************************/
+        assert(vy == 0);
+        /******************************************************************************************
+        * Begin Programming by contract (preconditions)
+        * ****************************************************************************************/
+
         /**This condition is used to implement logic for instant fly high feature.*/
         if (glfwGetKey(g->window, CRAFT_KEY_FLY_HIGH)) {
             if (g->flying){
                 vy = FLY_HEIGHT;
             }
         }
+
+        /******************************************************************************************
+        * Begin Programming by contract (postconditions)
+        * ****************************************************************************************/
+        assert(vy == FLY_HEIGHT);
+        /******************************************************************************************
+        * Begin Programming by contract (postconditions)
+        * ****************************************************************************************/
     }
     float speed = g->flying ? 20 : 5;
     int estimate = roundf(sqrtf(
