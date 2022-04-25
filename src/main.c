@@ -2411,10 +2411,19 @@ void handle_mouse_input() {
     }
 }
 
+/// [issue](https://github.com/Team-10-But-Better/Craft/issues/83)
+/// This function updates the characters position based on the player's inputs
+///
+///\param dt : the amount of time that has passed since the last frame
+///\param is_auto_walking_ptr : whether the teleport button was previously held
+///\param allow_next_autowalk_press_ptr : was the auto-walk key held last frame
+///\param do_auto_walk_ptr : should the character be auto-walking
 
 void handle_movement(double dt, bool *is_auto_walking_ptr, bool *allow_next_autowalk_press_ptr, bool *do_auto_walk_ptr) {
+    //the amount the character should move upwards
     static float dy = 0;
     State *s = &g->players->state;
+    //sz and sx hold the speed in the x and z axes
     int sz = 0;
     int sx = 0;
     int autoWalkState = glfwGetKey(g->window, CRAFT_KEY_ACTIVATE_AUTOWALK);
@@ -2460,6 +2469,7 @@ void handle_movement(double dt, bool *is_auto_walking_ptr, bool *allow_next_auto
         }//end auto walk
         	
     }
+    //variables that store the movement vector information
     float vx, vy, vz;
     
     
@@ -2482,15 +2492,19 @@ void handle_movement(double dt, bool *is_auto_walking_ptr, bool *allow_next_auto
         }
     }
     float speed = g->flying ? 20 : 5;
+    //estimation of the distance between the player and the desired location
     int estimate = roundf(sqrtf(
         powf(vx * speed, 2) +
         powf(vy * speed + ABS(dy) * 2, 2) +
         powf(vz * speed, 2)) * dt * 8);
     int step = MAX(8, estimate);
+    //ut is the fraction of the movement that should be completed each step
     float ut = dt / step;
+    //the vectors are set to the amount they move across each step
     vx = vx * ut * speed;
     vy = vy * ut * speed;
     vz = vz * ut * speed;
+    //move the character towards the destination repeatedly until we reach the desired number of steps
     for (int i = 0; i < step; i++) {
         if (g->flying) {
             dy = 0;
@@ -2506,6 +2520,7 @@ void handle_movement(double dt, bool *is_auto_walking_ptr, bool *allow_next_auto
             dy = 0;
         }
     }
+    //if the player is below the world, move them to the highest block that is directly overhead
     if (s->y < 0) {
         s->y = highest_block(s->x, s->z) + 2;
     }
