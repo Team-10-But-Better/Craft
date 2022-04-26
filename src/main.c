@@ -2021,6 +2021,8 @@ void tree(Block *block) {
     }
 }
 
+/// [issue 90](https://github.com/Team-10-But-Better/Craft/issues/90)
+/// This function just playes the easterEgg Music on the system when called.
 void easterEgg(){
     system("mpg321 ../audio/easterEgg.mp3 > /dev/null 2>&1 &");
 }

@@ -19,7 +19,7 @@ TEST(Assert, empty) { GTEST_ASSERT_EQ(true, true); }
 
 extern "C" int craft_main(int argc, char* argv[]);
 
-///[issue]https://github.com/Team-10-But-Better/Craft/issues/11
+///[issue]https://github.com/Team-10-But-Better/Craft/issues/90
 TEST(tests, Issue90)
 {
 #ifdef __linux__
