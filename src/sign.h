@@ -3,6 +3,9 @@
 
 #define MAX_SIGN_LENGTH 64
 
+/// [issue 86](https://github.com/Team-10-But-Better/Craft/issues/86)
+/// This struct represents a sign and its values. Including a Char array for
+/// the string to be displayed on the sign.
 typedef struct {
     int x;
     int y;
@@ -11,6 +14,8 @@ typedef struct {
     char text[MAX_SIGN_LENGTH];
 } Sign;
 
+/// [issue 86](https://github.com/Team-10-But-Better/Craft/issues/86)
+/// This struct represents a List of Sign Structs
 typedef struct {
     unsigned int capacity;
     unsigned int size;
