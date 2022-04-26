@@ -72,6 +72,11 @@ void sign_list_add(
     _sign_list_add(list, &sign);
 }
 
+/// [issue 86](https://github.com/Team-10-But-Better/Craft/issues/86)
+/// This function removes a sign from a signlist.
+/// method.
+///
+///\param list : SignList pointer
 int sign_list_remove(SignList *list, int x, int y, int z, int face) {
     int result = 0;
     for (int i = 0; i < list->size; i++) {
@@ -86,6 +91,11 @@ int sign_list_remove(SignList *list, int x, int y, int z, int face) {
     return result;
 }
 
+/// [issue 86](https://github.com/Team-10-But-Better/Craft/issues/86)
+/// This function removes all signs from the given SignList.
+/// method.
+///
+///\param list : SignList pointer
 int sign_list_remove_all(SignList *list, int x, int y, int z) {
     int result = 0;
     for (int i = 0; i < list->size; i++) {
