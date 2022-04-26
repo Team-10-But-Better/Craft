@@ -21,6 +21,11 @@ void sign_list_free(SignList *list) {
     free(list->data);
 }
 
+/// [issue 86](https://github.com/Team-10-But-Better/Craft/issues/86)
+/// This functionCreates a new SignList and Allocates new memory for it,
+/// then it copys it into the new SignList.
+///
+///\param list : SignList pointer
 void sign_list_grow(SignList *list) {
     SignList new_list;
     sign_list_alloc(&new_list, list->capacity * 2);
@@ -29,6 +34,7 @@ void sign_list_grow(SignList *list) {
     list->capacity = new_list.capacity;
     list->data = new_list.data;
 }
+
 
 void _sign_list_add(SignList *list, Sign *sign) {
     if (list->size == list->capacity) {
