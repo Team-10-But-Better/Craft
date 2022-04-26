@@ -2,16 +2,30 @@
 #include <string.h>
 #include "sign.h"
 
+/// [issue 86](https://github.com/Team-10-But-Better/Craft/issues/86)
+/// This function allocates memory for a SignList
+///
+///\param list : SignList pointer
+///\param capacity : Size of the SignList Arrays
 void sign_list_alloc(SignList *list, int capacity) {
     list->capacity = capacity;
     list->size = 0;
     list->data = (Sign *)calloc(capacity, sizeof(Sign));
 }
 
+/// [issue 86](https://github.com/Team-10-But-Better/Craft/issues/86)
+/// This function free's the data imside the SignList
+///
+///\param list : SignList pointer
 void sign_list_free(SignList *list) {
     free(list->data);
 }
 
+/// [issue 86](https://github.com/Team-10-But-Better/Craft/issues/86)
+/// This functionCreates a new SignList and Allocates new memory for it,
+/// then it copys it into the new SignList.
+///
+///\param list : SignList pointer
 void sign_list_grow(SignList *list) {
     SignList new_list;
     sign_list_alloc(&new_list, list->capacity * 2);
@@ -21,6 +35,12 @@ void sign_list_grow(SignList *list) {
     list->data = new_list.data;
 }
 
+/// [issue 86](https://github.com/Team-10-But-Better/Craft/issues/86)
+/// This function adds a sign struct to the SignList using the sign_grow()
+/// method.
+///
+///\param list : SignList pointer
+///\param sign : Sign Struct to add to List
 void _sign_list_add(SignList *list, Sign *sign) {
     if (list->size == list->capacity) {
         sign_list_grow(list);
@@ -29,6 +49,15 @@ void _sign_list_add(SignList *list, Sign *sign) {
     memcpy(e, sign, sizeof(Sign));
 }
 
+/// [issue 86](https://github.com/Team-10-But-Better/Craft/issues/86)
+/// This function is an overide function that can be used to initalize a sign add it
+/// to a SignList
+///\param list : SignList pointer
+///\param x : The sign's X value
+///\param y : The sign's Y value
+///\param Z : The sign's Z value
+///\param face : The sign's face value
+///\param text : The pointer to the string of text that will be displayed on the sign.
 void sign_list_add(
     SignList *list, int x, int y, int z, int face, const char *text)
 {
@@ -43,6 +72,11 @@ void sign_list_add(
     _sign_list_add(list, &sign);
 }
 
+/// [issue 86](https://github.com/Team-10-But-Better/Craft/issues/86)
+/// This function removes a sign from a signlist.
+/// method.
+///
+///\param list : SignList pointer
 int sign_list_remove(SignList *list, int x, int y, int z, int face) {
     int result = 0;
     for (int i = 0; i < list->size; i++) {
@@ -57,6 +91,11 @@ int sign_list_remove(SignList *list, int x, int y, int z, int face) {
     return result;
 }
 
+/// [issue 86](https://github.com/Team-10-But-Better/Craft/issues/86)
+/// This function removes all signs from the given SignList.
+/// method.
+///
+///\param list : SignList pointer
 int sign_list_remove_all(SignList *list, int x, int y, int z) {
     int result = 0;
     for (int i = 0; i < list->size; i++) {
