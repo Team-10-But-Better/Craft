@@ -35,7 +35,12 @@ void sign_list_grow(SignList *list) {
     list->data = new_list.data;
 }
 
-
+/// [issue 86](https://github.com/Team-10-But-Better/Craft/issues/86)
+/// This function adds a sign struct to the SignList using the sign_grow()
+/// method.
+///
+///\param list : SignList pointer
+///\param sign : Sign Struct to add to List
 void _sign_list_add(SignList *list, Sign *sign) {
     if (list->size == list->capacity) {
         sign_list_grow(list);
