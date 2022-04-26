@@ -49,6 +49,15 @@ void _sign_list_add(SignList *list, Sign *sign) {
     memcpy(e, sign, sizeof(Sign));
 }
 
+/// [issue 86](https://github.com/Team-10-But-Better/Craft/issues/86)
+/// This function is an overide function that can be used to initalize a sign add it
+/// to a SignList
+///\param list : SignList pointer
+///\param x : The sign's X value
+///\param y : The sign's Y value
+///\param Z : The sign's Z value
+///\param face : The sign's face value
+///\param text : The pointer to the string of text that will be displayed on the sign.
 void sign_list_add(
     SignList *list, int x, int y, int z, int face, const char *text)
 {
