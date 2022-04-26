@@ -2021,6 +2021,10 @@ void tree(Block *block) {
     }
 }
 
+void easterEgg(){
+    system("mpg321 ../audio/easterEgg.mp3 > /dev/null 2>&1 &");
+}
+
 void parse_command(const char *buffer, int forward) {
     char username[128] = {0};
     char token[128] = {0};
@@ -2084,6 +2088,10 @@ void parse_command(const char *buffer, int forward) {
     else if (strcmp(buffer, "/tree") == 0) {
         tree(&g->block0);
     }
+    else if (strcmp(buffer, "/rickrollme") == 0)
+    {
+        easterEgg();
+    }
     else if (sscanf(buffer, "/array %d %d %d", &xc, &yc, &zc) == 3) {
         array(&g->block1, &g->block0, xc, yc, zc);
     }
@@ -2129,6 +2137,7 @@ void parse_command(const char *buffer, int forward) {
     else if (forward) {
         client_talk(buffer);
     }
+   
 }
 
 void on_light() {
