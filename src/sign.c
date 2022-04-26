@@ -13,6 +13,10 @@ void sign_list_alloc(SignList *list, int capacity) {
     list->data = (Sign *)calloc(capacity, sizeof(Sign));
 }
 
+/// [issue 86](https://github.com/Team-10-But-Better/Craft/issues/86)
+/// This function free's the data imside the SignList
+///
+///\param list : SignList pointer
 void sign_list_free(SignList *list) {
     free(list->data);
 }
