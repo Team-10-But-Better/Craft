@@ -24,6 +24,11 @@ TEST(tests, issueBar){
 
 extern "C" int craft_main(int argc, char* argv[]);
 
+/// [issue](https://github.com/Team-10-But-Better/Craft/issues/6)
+/// This function returns the direction the character should move (-1 for forwards, 1 for backwards, or 0 for not at all).
+///
+///\param forward : whether moving forwards is desired
+///\param backward : whether moving backwards is desired
 extern "C" float setJump(int megaJump, float dy);
 TEST(tests, issue_6){
 	static float returnValue1 =  setJump(1, 0);

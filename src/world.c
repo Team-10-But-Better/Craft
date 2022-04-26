@@ -3,6 +3,10 @@
 #include "world.h"
 #include "stdlib.h"
 
+/// [issue 32](https://github.com/Team-10-But-Better/Craft/issues/32)
+/// This function returns the type of tree to generate 0 for a normal tree and 10 for a palm tree.
+///
+///\param choice : type of tree to choose
 int chooseTree(int choice){
     if(choice >= 1){
         return 0;

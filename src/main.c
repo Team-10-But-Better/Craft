@@ -2412,7 +2412,11 @@ void handle_mouse_input() {
     }
 }
 
-
+/// [issue 6](https://github.com/Team-10-But-Better/Craft/issues/6)
+/// This function returns the jump height as a float
+///
+///\param megaJump : whether jumping is desired
+///\param dy : Jump motion Vector
 float setJump(int megaJump, float dy)
 {
     if ((megaJump) && (dy == 0))
@@ -2453,8 +2457,9 @@ void handle_movement(double dt) {
         if (glfwGetKey(g->window, CRAFT_KEY_JUMP)) {
             if (g->flying) {
                 vy = 1;
-            }else{
-                dy = setJump(g->megaJump, dy);
+            }
+            else if (dy == 0) {
+                dy = 8;
             }
         }
     }
