@@ -2,6 +2,11 @@
 #include <string.h>
 #include "sign.h"
 
+/// [issue 86](https://github.com/Team-10-But-Better/Craft/issues/86)
+/// This function allocates memory for a SignList
+///
+///\param list : SignList pointer
+///\param capacity : Size of the SignList Arrays
 void sign_list_alloc(SignList *list, int capacity) {
     list->capacity = capacity;
     list->size = 0;
