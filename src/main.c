@@ -2456,8 +2456,6 @@ void handle_movement(double dt) {
         if (glfwGetKey(g->window, CRAFT_KEY_FLY_HIGH)) {
             if (g->flying){
                 vy = FLY_HEIGHT;
-            }
-        }
 
         /******************************************************************************************
         * Begin Programming by contract (postconditions)
@@ -2466,6 +2464,9 @@ void handle_movement(double dt) {
         /******************************************************************************************
         * Begin Programming by contract (postconditions)
         * ****************************************************************************************/
+
+            }
+        }
     }
     float speed = g->flying ? 20 : 5;
     int estimate = roundf(sqrtf(
