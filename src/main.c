@@ -2418,16 +2418,13 @@ void handle_mouse_input() {
 
 int getGroundedMovementSpeed(bool teleport, bool *teleportHeldLastFrame, int groundedMovementSpeed)
 {
-    if (teleport)
-    {
+    if (teleport){
         if (*teleportHeldLastFrame == false){
             *teleportHeldLastFrame = true;
             return 600;
         }
-        *teleportHeldLastFrame = true;
     }
-    else
-    {
+    else {
         *teleportHeldLastFrame = false;
     }
 
@@ -2536,14 +2533,8 @@ void handle_movement(double dt, bool *teleportHeldLastFrame, bool *crouchHeldLas
             dy = MAX(dy, -250);
         }
 
-        
-
         s->x += vx;
         s->y += vy + dy * ut;
-     
-
-        
-
         s->z += vz;
         
         if (collide(height, &s->x, &s->y, &s->z)) {
