@@ -39,6 +39,9 @@ the installation:
     sudo apt-get install cmake libglew-dev xorg-dev libcurl4-openssl-dev
     sudo apt-get build-dep glfw
 
+#### Linux (Ubuntu) Audio Support.
+    sudo apt install mpg321
+
 #### Windows
 
 Download and install [CMake](http://www.cmake.org/cmake/resources/software.html)
